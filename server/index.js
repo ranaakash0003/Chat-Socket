@@ -16,7 +16,6 @@ app.use(cors());
 app.use(router);
 
 io.on("connection", (socket) => {
-  // console.log("We have a new connection!!!");
   socket.on("join", ({ name, room }, callback) => {
     const { user, error } = addUser({ id: socket.id, name, room });
     if (error) {
@@ -43,14 +42,7 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
     console.log("########", user);
-
     io.to(user.room).emit("message", { user: user.name, text: message });
-
-    // io.to(user.room).emit("roomData", {
-    //   room: user.room,
-    //   users: getUserInRoom(user.room),
-    // });
-
     callback();
   });
 
